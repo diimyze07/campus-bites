@@ -1,17 +1,18 @@
 import { auth } from "@/auth";
 import Link from "next/link";
 import OutletCard from "@/components/outletCard/outletCard";
-import { addOutlet } from "@/testActions/dbActions";
-import { getOutlets } from "@/actions/getActions";
+// import { addOutlet } from "@/testActions/dbActions";
+// import { getOutlets } from "@/actions/getActions";
+import { allOutletsPromise } from "@/lib/mongodb/data";
 import { redirectIfNotSignedIn } from "@/actions/routingActions";
 import styles from "@/app/outlets/page.module.css";
-import { addMenuItem } from "@/testActions/dbActions";
+// import { addMenuItem } from "@/testActions/dbActions";
 
 export default async function Outlets() {
   const session = await auth();
   redirectIfNotSignedIn(session);
 
-  const outlets = await getOutlets();
+  const outlets = await allOutletsPromise;
   console.log(outlets);
 
   // addOutlet({

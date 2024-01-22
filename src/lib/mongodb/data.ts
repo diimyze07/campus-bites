@@ -12,7 +12,7 @@ export const getOutlet = async (outletQueryName: string) => {
   return result;
 };
 
-export const getOutlets = async () => {
+const getOutlets = async () => {
   const dbConnection = await mongoClientPromise;
   const db = dbConnection.db("CampusBites");
   const collection = db.collection("outlets");
@@ -25,6 +25,8 @@ export const getOutlets = async () => {
 
   return result;
 };
+
+export const allOutletsPromise = getOutlets();
 
 export const getMenuCategory = async (categoryQueryName: string) => {
   const dbConnection = await mongoClientPromise;
@@ -58,6 +60,22 @@ export const getMenuCategories = async (outletQueryName: string) => {
 
   return categories;
 };
+
+const getAllMenuCategories = async () => {
+  let result = [];
+
+  const outlets = await allOutletsPromise;
+
+  for await (const outlet of outlets) {
+    const menuCategories = await getMenuCategories(outlet.outletQueryName);
+
+    result.push({ outlet: outlet.outletQueryName, menuCategories });
+  }
+
+  return result;
+};
+
+export const allMenuCategoriesPromise = getAllMenuCategories();
 
 export const getMenuItems = async (outletQueryName: string) => {
   const dbConnection = await mongoClientPromise;
@@ -100,6 +118,22 @@ export const getMenuItems = async (outletQueryName: string) => {
 
   return categorisedMenuItems;
 };
+
+const getAllMenuItems = async () => {
+  let result = [];
+
+  const outlets = await allOutletsPromise;
+
+  for await (const outlet of outlets) {
+    const menuItems = await getMenuItems(outlet.outletQueryName);
+
+    result.push({ outlet: outlet.outletQueryName, menuItems });
+  }
+
+  return result;
+};
+
+export const allMenuItemsPromise = getAllMenuItems();
 
 export const getUserCart = async (userEmail: string) => {
   const dbConnection = await mongoClientPromise;
