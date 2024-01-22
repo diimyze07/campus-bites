@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
+import { allOutletsPromise } from "@/lib/mongodb/data";
+import { allMenuCategoriesPromise } from "@/lib/mongodb/data";
+import { allMenuItemsPromise } from "@/lib/mongodb/data";
 
 const inter = Inter({ subsets: ["latin"] });
 
