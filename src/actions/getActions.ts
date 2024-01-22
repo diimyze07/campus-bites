@@ -1,6 +1,7 @@
 import mongoClientPromise from "@/lib/mongodb/dbConnect";
 import type { FindCursor, WithId } from "mongodb";
 import type { Document } from "mongodb";
+import type { ObjectId } from "mongodb";
 
 export const getOutlet = async (outletQueryName: string) => {
   const dbConnection = await mongoClientPromise;
