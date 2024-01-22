@@ -1,7 +1,6 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-// import { createUser } from "@/actions/createUser";
 
 export default function SignInButton({
   children,

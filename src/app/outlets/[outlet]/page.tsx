@@ -1,12 +1,7 @@
-import { getOutlet } from "@/actions/getActions";
 import { redirect } from "next/navigation";
 import OutletHeader from "@/components/outletHeader/outletHeader";
 import MenuItemCard from "@/components/menuItemCard/menuItemCard";
-
-import { addMenuCategory } from "@/testActions/dbActions";
-import { addMenuItem } from "@/testActions/dbActions";
-import { createQueryName } from "@/lib/utils/utilFunctions";
-import { getMenuCategory } from "@/actions/getActions";
+import { getOutlet } from "@/actions/getActions";
 import { getMenuCategories } from "@/actions/getActions";
 import { getMenuItems } from "@/actions/getActions";
 
@@ -15,20 +10,15 @@ export default async function Outlet({
 }: {
   params: { outlet: string };
 }) {
-  const outlet = await getOutlet(params.outlet);
+  const [outlet, categories, menuItems] = await Promise.all([
+    getOutlet(params.outlet),
+    getMenuCategories(params.outlet),
+    getMenuItems(params.outlet),
+  ]);
 
   if (outlet === null) {
     redirect("/outlets");
   }
-
-  // // addMenuCategory("Chinese", outlet._id);
-  // const menuCategory = await getMenuCategory(createQueryName("Chinese"));
-  // if (menuCategory !== null)
-  //   addMenuItem("Chicken Fried Rice", 90, false, menuCategory._id, outlet._id);
-
-  const categories = await getMenuCategories(outlet.outletQueryName);
-  const menuItems = await getMenuItems(outlet.outletQueryName);
-  console.log(menuItems);
 
   return (
     <>

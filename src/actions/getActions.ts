@@ -1,44 +1,53 @@
 import mongoClientPromise from "@/lib/mongodb/dbConnect";
-import type { FindCursor, WithId } from "mongodb";
-import type { Document } from "mongodb";
-import type { ObjectId } from "mongodb";
+import type { WithId, Document, MongoClient } from "mongodb";
 
-export const getOutlet = async (outletQueryName: string) => {
-  const dbConnection = await mongoClientPromise;
+export const getOutlet = async (
+  outletQueryName: string,
+  dbConnection: MongoClient | null = null
+) => {
+  dbConnection =
+    dbConnection === null ? await mongoClientPromise : dbConnection;
   const db = dbConnection.db("CampusBites");
   const collection = db.collection("outlets");
 
-  const result = collection.findOne({ outletQueryName: outletQueryName });
+  const result = await collection.findOne({ outletQueryName: outletQueryName });
 
   return result;
 };
 
-export const getOutlets = async () => {
-  const dbConnection = await mongoClientPromise;
+export const getOutlets = async (dbConnection: MongoClient | null = null) => {
+  dbConnection =
+    dbConnection === null ? await mongoClientPromise : dbConnection;
   const db = dbConnection.db("CampusBites");
   const collection = db.collection("outlets");
 
-  const cursor: FindCursor<WithId<Document>> = collection.find({});
-  let result: WithId<Document>[] = [];
-  for await (const doc of cursor) {
-    result.push(doc);
-  }
+  const result = collection.find({}).toArray();
 
   return result;
 };
 
-export const getMenuCategory = async (categoryQueryName: string) => {
-  const dbConnection = await mongoClientPromise;
+export const getMenuCategory = async (
+  categoryQueryName: string,
+  dbConnection: MongoClient | null = null
+) => {
+  dbConnection =
+    dbConnection === null ? await mongoClientPromise : dbConnection;
   const db = dbConnection.db("CampusBites");
   const collection = db.collection("menuCategories");
 
-  const result = collection.findOne({ categoryQueryName: categoryQueryName });
+  const result = await collection.findOne({
+    categoryQueryName: categoryQueryName,
+  });
 
   return result;
 };
 
-export const getMenuCategories = async (outletQueryName: string) => {
-  const dbConnection = await mongoClientPromise;
+export const getMenuCategories = async (
+  outletQueryName: string,
+  dbConnection: MongoClient | null = null
+) => {
+  dbConnection =
+    dbConnection === null ? await mongoClientPromise : dbConnection;
   const db = dbConnection.db("CampusBites");
   const collectionOutlets = db.collection("outlets");
   const collectionCategories = db.collection("menuCategories");
@@ -50,18 +59,22 @@ export const getMenuCategories = async (outletQueryName: string) => {
   let categories: WithId<Document>[] = [];
 
   if (outlet === null) return categories;
-  const cursor: FindCursor<WithId<Document>> = collectionCategories.find({
-    outletId: outlet._id,
-  });
-  for await (const doc of cursor) {
-    categories.push(doc);
-  }
+
+  categories = await collectionCategories
+    .find({
+      outletId: outlet._id,
+    })
+    .toArray();
 
   return categories;
 };
 
-export const getMenuItems = async (outletQueryName: string) => {
-  const dbConnection = await mongoClientPromise;
+export const getMenuItems = async (
+  outletQueryName: string,
+  dbConnection: MongoClient | null = null
+) => {
+  dbConnection =
+    dbConnection === null ? await mongoClientPromise : dbConnection;
   const db = dbConnection.db("CampusBites");
   const collectionOutlets = db.collection("outlets");
   const collectionMenuItems = db.collection("menuItems");
@@ -73,13 +86,13 @@ export const getMenuItems = async (outletQueryName: string) => {
   const categorisedMenuItems: WithId<Document>[][] = [];
   if (outlet === null) return categorisedMenuItems;
 
-  const cursor: FindCursor<WithId<Document>> = collectionCategories.find({
-    outletId: outlet._id,
-  });
   let categories: WithId<Document>[] = [];
-  for await (const doc of cursor) {
-    categories.push(doc);
-  }
+
+  categories = await collectionCategories
+    .find({
+      outletId: outlet._id,
+    })
+    .toArray();
 
   for await (const category of categories) {
     let categoryMenuItems: WithId<Document>[] = [];
@@ -102,16 +115,16 @@ export const getMenuItems = async (outletQueryName: string) => {
   return categorisedMenuItems;
 };
 
-export const getUserCart = async (userEmail: string) => {
-  const dbConnection = await mongoClientPromise;
-  const db = dbConnection.db("CampusBites");
-  const collection = db.collection("cartItems");
+// export const getUserCart = async (userEmail: string) => {
+//   const dbConnection = await mongoClientPromise;
+//   const db = dbConnection.db("CampusBites");
+//   const collection = db.collection("cartItems");
 
-  const cursor: FindCursor<WithId<Document>> = collection.find({ userEmail });
-  let result: WithId<Document>[] = [];
-  for await (const doc of cursor) {
-    result.push(doc);
-  }
+//   const cursor: FindCursor<WithId<Document>> = collection.find({ userEmail });
+//   let result: WithId<Document>[] = [];
+//   for await (const doc of cursor) {
+//     result.push(doc);
+//   }
 
-  return result;
-};
+//   return result;
+// };

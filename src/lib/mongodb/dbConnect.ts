@@ -5,7 +5,7 @@ if (!process.env.MONGODB_URI) {
 }
 
 const URI = process.env.MONGODB_URI;
-let mongoClient = new MongoClient(URI);
-let mongoClientPromise = mongoClient.connect();
+const mongoClient = new MongoClient(URI);
+const mongoClientPromise = mongoClient.connect();
 
 export default mongoClientPromise;

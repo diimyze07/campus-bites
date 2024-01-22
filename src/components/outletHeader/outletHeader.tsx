@@ -1,5 +1,4 @@
-import type { WithId } from "mongodb";
-import type { Document } from "mongodb";
+import type { WithId, Document } from "mongodb";
 
 export default function OutletHeader({ outlet }: { outlet: WithId<Document> }) {
   return (
