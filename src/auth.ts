@@ -1,11 +1,17 @@
-import NextAuth, { NextAuthConfig } from "next-auth";
-import { MongoDBAdapter } from "@auth/mongodb-adapter";
-import Google from "next-auth/providers/google";
-import mongoClientPromise from "./lib/mongodb/dbConnect";
+import NextAuth from "next-auth";
+import Google from "@auth/core/providers/google";
+import { FirestoreAdapter, initFirestore } from "@auth/firebase-adapter";
+import { cert } from "firebase-admin/app";
 
-export const authConfig = {
-  adapter: MongoDBAdapter(mongoClientPromise),
+export const { auth, handlers } = NextAuth({
   providers: [Google],
-} satisfies NextAuthConfig;
-
-export const { handlers, auth } = NextAuth(authConfig);
+  adapter: FirestoreAdapter(
+    initFirestore({
+      credential: cert({
+        projectId: process.env.FIREBASE_PROJECT_ID,
+        clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+        privateKey: process.env.FIREBASE_PRIVATE_KEY,
+      }),
+    })
+  ),
+});

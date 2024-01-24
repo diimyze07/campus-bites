@@ -1,19 +1,18 @@
-import { auth } from "@/auth";
-import SignInButton from "@/components/signInButton/signInButton";
-import { redirect } from "next/navigation";
+import styles from "@/app/page.module.css";
+import SignInButton from "@/components/signInButton";
 
 export default async function Home() {
-  const session = await auth();
-
-  if (session?.user) {
-    redirect("/outlets");
-  }
-
   return (
-    <>
-      <h1>Welcome to Campus Eats</h1>
-      <p>The one place you need to order anything from campus.</p>
-      <SignInButton redirectUrl="/api/auth/signin">Sign In</SignInButton>
-    </>
+    <div className={styles.wrapper}>
+      <span className="material-symbols-outlined">light_mode</span>
+      <div className={styles.hero}>
+        <h1 className={styles.title}>
+          <span>Welcome to</span>
+          <span>Campus Eats</span>
+        </h1>
+        <p className={styles.tagline}>Get any food from any outlet with ease</p>
+      </div>
+      <SignInButton />
+    </div>
   );
 }
