@@ -1,6 +1,6 @@
 .wrapper {
   display: grid;
-  grid-template-rows: auto 10fr auto;
+  grid-template-rows: auto 10000fr auto;
   justify-content: center;
   justify-items: center;
   align-items: center;
@@ -14,7 +14,8 @@
 }
 
 .title {
-  font-weight: 400;
+  font-weight: 800;
+  letter-spacing: -5px;
   font-size: 8rem;
   display: flex;
   flex-direction: column;
@@ -48,6 +49,7 @@
 @media (max-width: 600px) {
   .title {
     font-size: 4rem;
+    letter-spacing: -2px;
   }
 
   .title > span:last-of-type {
@@ -66,6 +68,7 @@
 
   .title {
     font-size: 3rem;
+    letter-spacing: -1px;
   }
 
   .tagline {

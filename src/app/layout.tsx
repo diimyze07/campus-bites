@@ -4,7 +4,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 
 const poppins = Manrope({
-  weight: ["400", "500", "700"],
+  weight: ["400", "500", "700", "800"],
   subsets: ["latin"],
 });
 
